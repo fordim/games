@@ -3,6 +3,7 @@ header {
   width: 100%;
   background: cornflowerblue;
   border-radius: 5px;
+  border: 1px solid #3772e8;
 }
 
 .button {
@@ -15,8 +16,9 @@ header {
   text-decoration: none;
   border-radius: 5px;
   line-height: 35px;
+  border: 1px solid #3772e8;
 }
 
 .active {
-  color: purple;
+  color: #c21449;
 }

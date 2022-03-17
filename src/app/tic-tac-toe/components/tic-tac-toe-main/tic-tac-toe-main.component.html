@@ -1,1 +1,30 @@
-<p>tic-tac-toe-main works!</p>
+<div class="root">
+  <div class="wrapper">
+    <div class="block">
+      <div class="block-header">
+        <h3>Tic Tac Toe</h3>
+      </div>
+      <div class="block-field">
+        <div class="game-blocks">
+          <div class="game-block" *ngFor="let block of startGameBlocks; let i = index" (click)="move($event, i)">{{block}}</div>
+        </div>
+      </div>
+      <div class="block-footer">
+        <button class="block-button" (click)="resetGame()">Новая игра</button>
+      </div>
+    </div>
+    <div class="block">
+      <div class="block-header">
+        <h3>Logs</h3>
+      </div>
+      <div class="block-field-logs"></div>
+      <div class="block-footer">
+        <button class="block-button" (click)="stepBack()">Шаг назад</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal">
+    <app-tic-tac-toe-modal></app-tic-tac-toe-modal>
+  </div>
+</div>
+

@@ -1,0 +1,125 @@
+.root {
+  width: 100%;
+  margin: 0 auto;
+  max-width: 1400px;
+  min-height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  background: linear-gradient(306.09deg, #f7fefc 3%, #2cd8ac 59.8%);
+}
+
+.wrapper {
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+}
+
+.block {
+  width: 500px;
+  background-color: lightgrey;
+  border: 1px solid black;
+  border-radius: 8px;
+  position: relative;
+  font-family: "Gill Sans", sans-serif;
+}
+
+.block-header {
+  line-height: 100px;
+  background-color: #b9b9b9;
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
+  text-align: center;
+  font-size: 60px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  color: rgb(255, 225, 0);
+}
+
+.block-header > h3 {
+  margin: 0;
+  font-weight: 400;
+}
+
+.block-field {
+  height: 300px;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+.game-blocks {
+  height: 300px;
+  width: 300px;
+  border-right: 1px solid black;
+  border-left: 1px solid black;
+  background-color: white;
+  font-family: cursive;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 70px;
+}
+
+.game-block {
+  height: 98px;
+  width: 98px;
+  border: 1px solid black;
+  text-align: center;
+}
+
+.block-footer {
+  padding: 25px 0;
+  background-color: #b9b9b9;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.block-button {
+  display: block;
+  color: white;
+  width: 200px;
+  height: 50px;
+  margin: 0 auto;
+
+  border: 1px solid darkblue;
+  border-radius: 5px;
+  background: linear-gradient(rgb(255, 225, 0), rgb(230, 195, 0));
+  font-size:26px;
+  text-align: center;
+}
+
+.block-button:hover{
+  background: linear-gradient(rgb(230, 195, 0), rgb(215, 185, 0));
+  color: darkgrey;
+}
+
+
+.block-field-logs {
+  height: 300px;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  background-color:white;
+  font-size:15px;
+}
+
+.log-block > p {
+  margin: 0;
+}
+
+.modal {
+  position: absolute;
+  visibility:hidden;
+  z-index: 5;
+}
+
+.ban-blocks {
+  opacity: 0.4;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.ban-root {
+  background-image: none;
+  background-color: darkgrey;
+}
