@@ -14,6 +14,7 @@ export class TicTacToeService {
   public stepsHistory: any = this.historyOfGame.slice(0);
   public actionPlayer = true;
   public firstMove = false;
+  public firstMoveAI: boolean = false;
 
   constructor() { }
 
@@ -22,7 +23,8 @@ export class TicTacToeService {
     this.drawBoard();
     this.clearLog();
     this.stepsHistory = [];
-    this.firstMove = !this.firstMove;
+    this.firstMove = false;
+    this.firstMoveAI = false;
   };
 
   public move(index: number): void {
@@ -36,15 +38,7 @@ export class TicTacToeService {
     this.addNewLog(index);
     this.writeLog();
     this.stepsHistory.push(this.gameTable.slice(0));
-
-    if (this.isPlayerWin()) {
-      this.showModal('Победил игрок игравший за: ' + this.nameOfPlayer() + '. Хотите начать новую игру?');
-    }
-
-    if (this.isGameEnded()) {
-      this.showModal('Ничья, все поля заполнены. Можете начать <<Новую игру>>');
-    }
-
+    this.checkGameStatus();
     this.changePlayer();
   }
 
@@ -83,7 +77,7 @@ export class TicTacToeService {
     }
   };
 
-  private drawOneMove(index: number): void {
+  public drawOneMove(index: number): void {
     const gameBlocks = document.getElementsByClassName('game-block');
 
     gameBlocks[index].innerHTML = this.nameOfPlayer();
@@ -94,10 +88,19 @@ export class TicTacToeService {
     return this.actionPlayer ? 'X' : 'O'
   };
 
-  private changePlayer(): void {
+  public changePlayer(): void {
     this.actionPlayer = !this.actionPlayer;
   }
 
+  public checkGameStatus(): void {
+    if (this.isPlayerWin()) {
+      this.showModal('Победил игрок игравший за: ' + this.nameOfPlayer() + '. Хотите начать новую игру?');
+    }
+
+    if (this.isGameEnded()) {
+      this.showModal('Ничья, все поля заполнены. Можете начать <<Новую игру>>');
+    }
+  }
 
   private isPlayerWin(): boolean {
     const table = this.gameTable;
@@ -119,11 +122,11 @@ export class TicTacToeService {
     })
   }
 
-  private addNewLog(index: number): void {
+  public addNewLog(index: number): void {
     this.logBlock.push("<p>Походил игрок игравщий за: " + this.nameOfPlayer() + ". В ячейку массива №" + index + "</p>");
   }
 
-  private writeLog(): void {
+  public writeLog(): void {
     const logBlocks = document.getElementsByClassName('block-field-logs');
     logBlocks[0].innerHTML = this.logBlock.join('');
   };

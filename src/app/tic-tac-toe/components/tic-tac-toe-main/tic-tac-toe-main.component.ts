@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TicTacToeService } from "../../services/tic-tac-toe.service";
+import { TicTacToeAutoService } from "../../services/tic-tac-toe-auto.service";
 
 @Component({
   selector: 'app-tic-tac-toe-main',
@@ -10,13 +11,14 @@ export class TicTacToeMainComponent implements OnInit {
 
   startGameBlocks: string[] = [ 'T', 'I', 'C', 'T', 'A', 'C', 'T', 'O', 'E' ];
 
-  constructor(private service: TicTacToeService) { }
+  constructor(private service: TicTacToeService, private serviceAuto: TicTacToeAutoService) { }
 
   ngOnInit(): void {
   }
 
   move($event: Event, index: number): void {
-    this.service.move(index);
+    this.serviceAuto.move(index);
+    // this.service.move(index);
   }
 
   resetGame(): void {
