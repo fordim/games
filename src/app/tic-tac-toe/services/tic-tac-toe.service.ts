@@ -5,16 +5,18 @@ import { Injectable } from '@angular/core';
 })
 export class TicTacToeService {
 
-  public blankGameTable = [ '', '', '', '', '', '', '', '', ''];
-  public logGameTable = [];
-  public historyOfGame = [];
+  private blankGameTable = [ '', '', '', '', '', '', '', '', ''];
+  private logGameTable = [];
+  private historyOfGame = [];
+  private moveAiStart = [false, false, false, false, false];
 
   public gameTable: string[] = this.blankGameTable.slice(0);
   public logBlock: string[] = this.logGameTable.slice(0);
   public stepsHistory: any = this.historyOfGame.slice(0);
   public actionPlayer = true;
   public firstMove = false;
-  public firstMoveAI: boolean = false;
+  public isFirstPlayerMoveCenter = false;
+  public moveAi: boolean[] = this.moveAiStart.slice();
 
   constructor() { }
 
@@ -24,14 +26,16 @@ export class TicTacToeService {
     this.clearLog();
     this.stepsHistory = [];
     this.firstMove = false;
-    this.firstMoveAI = false;
+    this.moveAi = this.moveAiStart.slice();
+    this.isFirstPlayerMoveCenter = false;
+    this.actionPlayer = true;
   };
 
-  public move(index: number): void {
+  public move(index: number): string | void {
     this.checkFirstMove();
 
     if (this.gameTable[index] !== ''){
-      return alert('Поле уже занято!');
+      return 'Поле уже занято!';
     }
 
     this.drawOneMove(index);

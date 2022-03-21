@@ -17,8 +17,12 @@ export class TicTacToeMainComponent implements OnInit {
   }
 
   move($event: Event, index: number): void {
-    this.serviceAuto.move(index);
-    // this.service.move(index);
+    let errorMessage = this.serviceAuto.move(index);
+    // let errorMessage = this.service.move(index);
+
+    if (errorMessage) {
+      return alert(errorMessage);
+    }
   }
 
   resetGame(): void {

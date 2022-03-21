@@ -11,15 +11,29 @@ export class TicTacToeAutoService {
   private cornerIndexes: number[] = [0, 2, 6, 8];
   private centerIndex: number = 4;
   private middleIndexes: number[] = [1, 3, 5, 7];
+  private error: number = 500;
+  private success: number = 200;
 
   constructor(private serviceManual: TicTacToeService) {
 
   }
 
-  public move(index: number): void {
-    this.serviceManual.move(index);
+  public move(index: number): string | void {
+     const errorMassageFromPlayer = this.serviceManual.move(index);
 
-    const indexAI = this.chooseMoveForAI(index);
+     if (errorMassageFromPlayer) {
+       return alert(errorMassageFromPlayer);
+     }
+
+    const indexAI: number  = this.chooseMoveForAI(index);
+
+    if (indexAI === this.error) {
+      return 'Невозможно выбрать поле, куда походить';
+    }
+
+    if (indexAI === this.success) {
+      return;
+    }
 
     this.serviceManual.drawOneMove(indexAI);
     this.serviceManual.addNewLog(indexAI);
@@ -30,17 +44,39 @@ export class TicTacToeAutoService {
   }
 
   private chooseMoveForAI(playerIndex: number): number {
-    const gameTable = this.serviceManual.gameTable;
-
-    if (!this.serviceManual.firstMoveAI) {
+    if (!this.serviceManual.moveAi[0]) {
+      this.addOneMoveAI();
       return this.chooseFirstMoveForAI(playerIndex);
     }
 
-    return this.chooseNextMoveForAI(playerIndex);
+    let attackAndDefence = this.chooseNextMoveForAI();
+    if (attackAndDefence !== null) {
+      this.addOneMoveAI();
+      return attackAndDefence;
+    }
+
+    if (!this.serviceManual.moveAi[1]) {
+      this.addOneMoveAI();
+      return this.chooseSecondMoveForAI(playerIndex);
+    }
+
+    let otherMove = this.chooseOtherMove();
+    if (otherMove !== this.success) {
+      this.addOneMoveAI();
+      return otherMove;
+    }
+
+    if (otherMove === this.success) {
+      return this.success;
+    }
+
+    return this.error;
   }
 
   private chooseFirstMoveForAI(playerIndex: number): number {
-    this.serviceManual.firstMoveAI = true;
+    if (playerIndex === this.centerIndex) {
+      this.serviceManual.isFirstPlayerMoveCenter = true;
+    }
 
     if (playerIndex === this.centerIndex) {
       return this.cornerIndexes[Math.floor(Math.random() * this.cornerIndexes.length)];
@@ -49,13 +85,80 @@ export class TicTacToeAutoService {
     return this.centerIndex;
   }
 
-  private chooseNextMoveForAI(playerIndex: number): number {
+  private chooseSecondMoveForAI(playerIndex: number): number {
+    if (this.serviceManual.isFirstPlayerMoveCenter) {
+      return this.chooseFreeCornerIndex() ?? 0;
+    }
+
+    //Лайфхак к победе был
+    if (playerIndex === 7) {
+      return 5;
+    }
+
+    return this.chooseFreeMiddleIndex() ?? 1;
+  }
+
+  private chooseOtherMove(): number {
+    for ( let i = 0; i < this.serviceManual.gameTable.length; i++ ) {
+      if (this.serviceManual.gameTable[i] === '') {
+        return i;
+      }
+    }
+
+    // Поля закончились, ничья
+    return this.success;
+  }
+
+  private chooseNextMoveForAI(): number | null {
+    let checkAttack = this.checkWinCombination(this.nameAI);
+    if (checkAttack !== null) {
+      return checkAttack;
+    }
+
+    let checkDefence = this.checkWinCombination(this.namePlayer);
+    if (checkDefence !== null) {
+      return checkDefence;
+    }
+
+    return null
+  }
+
+  private addOneMoveAI(): void {
+    for ( let i = 0; i < this.serviceManual.moveAi.length; i++ ) {
+      if (!this.serviceManual.moveAi[i]) {
+        this.serviceManual.moveAi[i] = true;
+        break;
+      }
+    }
+  }
+
+  private chooseFreeCornerIndex(): number | void {
     const gameTable = this.serviceManual.gameTable;
 
-    const winCombinationOne = ['', this.nameAI, this.nameAI].toString();
-    const winCombinationTwo = [this.nameAI, '', this.nameAI].toString();
-    const winCombinationThree = [this.nameAI, this.nameAI, ''].toString();
-    const winCombinations = [ ['', this.nameAI, this.nameAI], [this.nameAI, '', this.nameAI], [this.nameAI, this.nameAI, ''] ];
+    for ( let i = 0; i < 4; i++ ) {
+      if (gameTable[this.cornerIndexes[i]] === '') {
+        return this.cornerIndexes[i];
+      }
+    }
+  }
+
+  private chooseFreeMiddleIndex(): number | void {
+    const gameTable = this.serviceManual.gameTable;
+
+    for ( let i = 0; i < 4; i++ ) {
+      if (gameTable[this.middleIndexes[i]] === '') {
+        return this.middleIndexes[i];
+      }
+    }
+  }
+
+  private checkWinCombination(playerName: string): number | null{
+    const gameTable = this.serviceManual.gameTable;
+
+    const winCombinationOne = ['', playerName, playerName].toString();
+    const winCombinationTwo = [playerName, '', playerName].toString();
+    const winCombinationThree = [playerName, playerName, ''].toString();
+    const winCombinations = [ ['', playerName, playerName], [playerName, '', playerName], [playerName, playerName, ''] ];
 
     const lines = [];
     for ( let i = 0, y = 0, k = 3; i < gameTable.length - 1; i = i + 3, y++, k++){
@@ -69,22 +172,18 @@ export class TicTacToeAutoService {
     for (let i = 0; i < lines.length; i++) {
       let line = lines[i];
       if (winCombinations.some(array => array.toString() === line.toString())) {
-        console.log('dsfdsfdsfdss');
         switch (lines[i].toString()) {
           case winCombinationOne:
-            console.log('1');
             return TicTacToeAutoService.chooseWinAnswerCombinationOne(i);
           case winCombinationTwo:
-            console.log('2');
             return TicTacToeAutoService.chooseWinAnswerCombinationTwo(i);
           case winCombinationThree:
-            console.log('3');
             return TicTacToeAutoService.chooseWinAnswerCombinationThree(i)
         }
       }
     }
 
-    return 1;
+    return null;
   }
 
   private static chooseWinAnswerCombinationOne(index: number): number {
