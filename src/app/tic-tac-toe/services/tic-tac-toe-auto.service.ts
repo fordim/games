@@ -82,12 +82,38 @@ export class TicTacToeAutoService {
       return this.chooseFreeCornerIndex(gameTable) ?? 0;
     }
 
-    //Лайфхак к победе был
-    if (playerIndex === 7) {
-      return 5;
+    const hardcodeMove = this.chooseSecondMoveForAIHardcode(gameTable);
+    if (hardcodeMove !== null) {
+      return hardcodeMove;
     }
 
     return this.chooseFreeMiddleIndex(gameTable) ?? 1;
+  }
+
+  private chooseSecondMoveForAIHardcode(gameTable: string[]): number | null {
+    if (gameTable[2] === this.serviceManual.playerOne && gameTable[3] === this.serviceManual.playerOne) {
+      return TicTacToeAutoService.randomNumber([0, 7]);
+    }
+
+    if (gameTable[1] === this.serviceManual.playerOne && gameTable[6] === this.serviceManual.playerOne) {
+      return TicTacToeAutoService.randomNumber([0, 5]);
+    }
+
+    if (gameTable[5] === this.serviceManual.playerOne && gameTable[6] === this.serviceManual.playerOne) {
+      return TicTacToeAutoService.randomNumber([1, 8]);
+    }
+
+    if (gameTable[0] === this.serviceManual.playerOne && gameTable[7] === this.serviceManual.playerOne) {
+      return TicTacToeAutoService.randomNumber([5, 6]);
+    }
+
+    return null;
+  }
+
+  private static randomNumber(array: number[]): number
+  {
+    const randNum = Math.floor(Math.random() * array.length);
+    return array[randNum];
   }
 
   private chooseOtherMove(gameTable: string[]): number {
