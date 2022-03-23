@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { TicTacToeService } from "../../services/tic-tac-toe.service";
+import { TicTacToeMainComponent } from "../tic-tac-toe-main/tic-tac-toe-main.component";
 
 @Component({
   selector: 'app-tic-tac-toe-modal',
@@ -7,13 +8,24 @@ import { TicTacToeService } from "../../services/tic-tac-toe.service";
   styleUrls: ['./tic-tac-toe-modal.component.css']
 })
 export class TicTacToeModalComponent implements OnInit {
+  @Input() contentText: string = '';
+  @Input() buttonText: string = '';
 
-  constructor(private service: TicTacToeService) { }
+  public error: boolean = false;
+
+  constructor(private service: TicTacToeService, private mainComponent: TicTacToeMainComponent) { }
 
   ngOnInit(): void {
   }
 
   resetGameModal() {
-    this.service.resetGameModal();
+    this.service.error$.subscribe(data => this.error = data);
+
+    if (!this.error) {
+      this.service.resetAndDrawBoard();
+    }
+
+    this.service.closeModal();
+    this.mainComponent.modal$ = this.service.modal$;
   }
 }

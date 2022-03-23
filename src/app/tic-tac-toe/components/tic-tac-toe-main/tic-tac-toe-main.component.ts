@@ -9,27 +9,50 @@ import { TicTacToeAutoService } from "../../services/tic-tac-toe-auto.service";
 })
 export class TicTacToeMainComponent implements OnInit {
 
-  startGameBlocks: string[] = [ 'T', 'I', 'C', 'T', 'A', 'C', 'T', 'O', 'E' ];
+  private startGameBlocks: string[] = [ 'T', 'I', 'C', 'T', 'A', 'C', 'T', 'O', 'E' ];
 
-  constructor(private service: TicTacToeService, private serviceAuto: TicTacToeAutoService) { }
+  public logs$ = this.service.logs$;
+  public gameTable$ = this.service.gameTable$;
+  public modal$ = this.service.modal$;
+  public contentTextEvent$ = this.service.contentTextEvent$;
+  public buttonTextEvent$ = this.service.buttonTextEvent$;
+  public gameWithAi = false;
 
-  ngOnInit(): void {
+  constructor(private service: TicTacToeService, private serviceAuto: TicTacToeAutoService) {
   }
 
-  move($event: Event, index: number): void {
-    let errorMessage = this.serviceAuto.move(index);
-    // let errorMessage = this.service.move(index);
+  ngOnInit(): void {
+    this.gameTable$.next(this.startGameBlocks);
+  }
 
-    if (errorMessage) {
-      return alert(errorMessage);
+  move(index: number): void {
+    if (this.gameWithAi) {
+      this.serviceAuto.move(index);
+    } else {
+      this.service.move(index);
     }
+
+    this.modal$ = this.service.modal$;
+    this.contentTextEvent$ = this.service.contentTextEvent$;
+    this.buttonTextEvent$ = this.service.buttonTextEvent$;
   }
 
   resetGame(): void {
     this.service.resetAndDrawBoard();
+    this.gameWithAi = false;
+  }
+
+  resetGameWithAI(): void {
+    this.service.resetAndDrawBoard();
+    this.gameWithAi = true;
   }
 
   stepBack(): void {
-    this.service.stepBackAndDraw();
+    if (this.gameWithAi) {
+      this.service.oneStepBack();
+      this.service.oneStepBack();
+    } else {
+      this.service.oneStepBack();
+    }
   }
 }

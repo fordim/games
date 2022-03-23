@@ -1,30 +1,36 @@
-<div class="root">
+<div class="root" [class.ban-root]="(modal$ | async)">
   <div class="wrapper">
-    <div class="block">
+    <div class="block" [class.ban-blocks]="(modal$ | async)">
       <div class="block-header">
         <h3>Tic Tac Toe</h3>
       </div>
       <div class="block-field">
         <div class="game-blocks">
-          <div class="game-block" *ngFor="let block of startGameBlocks; let i = index" (click)="move($event, i)">{{block}}</div>
+          <div class="game-block" *ngFor="let block of (gameTable$ | async); let i = index" (click)="move(i)">{{ block }}</div>
         </div>
       </div>
       <div class="block-footer">
         <button class="block-button" (click)="resetGame()">Новая игра</button>
+        <button class="block-button" (click)="resetGameWithAI()">Новая игра c AI</button>
       </div>
     </div>
-    <div class="block">
+    <div class="block" [class.ban-blocks]="(modal$ | async)">
       <div class="block-header">
         <h3>Logs</h3>
       </div>
-      <div class="block-field-logs"></div>
+      <div class="block-field-logs">
+        <p *ngFor="let log of (logs$ | async)">{{ log }}</p>
+      </div>
       <div class="block-footer">
         <button class="block-button" (click)="stepBack()">Шаг назад</button>
       </div>
     </div>
   </div>
-  <div class="modal">
-    <app-tic-tac-toe-modal></app-tic-tac-toe-modal>
+  <div class="modal" *ngIf="(modal$ | async)">
+    <app-tic-tac-toe-modal
+      [contentText]="(contentTextEvent$ | async)"
+      [buttonText]="(buttonTextEvent$ | async)"
+    ></app-tic-tac-toe-modal>
   </div>
 </div>
 

@@ -1,8 +1,7 @@
 .root {
   width: 100%;
   margin: 0 auto;
-  max-width: 1400px;
-  min-height: 700px;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,6 +10,8 @@
 }
 
 .wrapper {
+  max-width: 1400px;
+  min-width: 1050px;
   width: 100%;
   position: relative;
   display: flex;
@@ -73,6 +74,7 @@
   background-color: #b9b9b9;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
+  display: flex;
 }
 
 .block-button {
@@ -103,13 +105,13 @@
   font-size:15px;
 }
 
-.log-block > p {
-  margin: 0;
+.block-field-logs > p {
+  margin: 10px;
 }
 
 .modal {
   position: absolute;
-  visibility:hidden;
+  visibility: visible;
   z-index: 5;
 }
 

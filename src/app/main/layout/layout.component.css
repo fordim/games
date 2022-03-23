@@ -4,6 +4,7 @@ header {
   background: cornflowerblue;
   border-radius: 5px;
   border: 1px solid #3772e8;
+  position: absolute;
 }
 
 .button {

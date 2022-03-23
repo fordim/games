@@ -6,78 +6,70 @@ import { TicTacToeService } from "./tic-tac-toe.service";
 })
 export class TicTacToeAutoService {
 
-  private nameAI: string = 'O';
-  private namePlayer: string = 'X';
+  private nameAI: string = this.serviceManual.playerTwo;
   private cornerIndexes: number[] = [0, 2, 6, 8];
   private centerIndex: number = 4;
   private middleIndexes: number[] = [1, 3, 5, 7];
-  private error: number = 500;
   private success: number = 200;
 
   constructor(private serviceManual: TicTacToeService) {
-
   }
 
-  public move(index: number): string | void {
+  public move(index: number): boolean | void {
      const errorMassageFromPlayer = this.serviceManual.move(index);
-
      if (errorMassageFromPlayer) {
-       return alert(errorMassageFromPlayer);
+       return;
      }
 
-    const indexAI: number  = this.chooseMoveForAI(index);
-
-    if (indexAI === this.error) {
-      return 'Невозможно выбрать поле, куда походить';
-    }
-
+    const indexAI: number = this.chooseMoveForAI(index);
     if (indexAI === this.success) {
       return;
     }
 
     this.serviceManual.drawOneMove(indexAI);
     this.serviceManual.addNewLog(indexAI);
-    this.serviceManual.writeLog();
-    this.serviceManual.stepsHistory.push(this.serviceManual.gameTable.slice(0));
+    this.serviceManual.stepsHistory$.next([...this.serviceManual.stepsHistory$.value, [...this.serviceManual.gameTable$.value]]);
     this.serviceManual.checkGameStatus();
     this.serviceManual.changePlayer();
   }
 
   private chooseMoveForAI(playerIndex: number): number {
-    if (!this.serviceManual.moveAi[0]) {
-      this.addOneMoveAI();
+    const gameTable = this.serviceManual.gameTable$.value;
+    let moveNumber = TicTacToeAutoService.getMoveNumber(gameTable);
+
+    if (moveNumber === 1) {
       return this.chooseFirstMoveForAI(playerIndex);
     }
 
-    let attackAndDefence = this.chooseNextMoveForAI();
+    let attackAndDefence = this.chooseAttackOrDefenceForAI();
     if (attackAndDefence !== null) {
-      this.addOneMoveAI();
       return attackAndDefence;
     }
 
-    if (!this.serviceManual.moveAi[1]) {
-      this.addOneMoveAI();
-      return this.chooseSecondMoveForAI(playerIndex);
+    if (moveNumber === 2) {
+      return this.chooseSecondMoveForAI(playerIndex, gameTable);
     }
 
-    let otherMove = this.chooseOtherMove();
+    let otherMove = this.chooseOtherMove(gameTable);
     if (otherMove !== this.success) {
-      this.addOneMoveAI();
       return otherMove;
     }
 
-    if (otherMove === this.success) {
-      return this.success;
+    return this.success;
+  }
+
+  private static getMoveNumber(gameTable: string[]): number {
+    let counter = 1;
+    for (let i = 0; i < gameTable.length; i++) {
+      if (gameTable[i] !== '') {
+        counter++;
+      }
     }
 
-    return this.error;
+    return counter / 2;
   }
 
   private chooseFirstMoveForAI(playerIndex: number): number {
-    if (playerIndex === this.centerIndex) {
-      this.serviceManual.isFirstPlayerMoveCenter = true;
-    }
-
     if (playerIndex === this.centerIndex) {
       return this.cornerIndexes[Math.floor(Math.random() * this.cornerIndexes.length)];
     }
@@ -85,9 +77,9 @@ export class TicTacToeAutoService {
     return this.centerIndex;
   }
 
-  private chooseSecondMoveForAI(playerIndex: number): number {
-    if (this.serviceManual.isFirstPlayerMoveCenter) {
-      return this.chooseFreeCornerIndex() ?? 0;
+  private chooseSecondMoveForAI(playerIndex: number, gameTable: string[]): number {
+    if (gameTable[this.centerIndex] === this.serviceManual.playerOne) {
+      return this.chooseFreeCornerIndex(gameTable) ?? 0;
     }
 
     //Лайфхак к победе был
@@ -95,12 +87,12 @@ export class TicTacToeAutoService {
       return 5;
     }
 
-    return this.chooseFreeMiddleIndex() ?? 1;
+    return this.chooseFreeMiddleIndex(gameTable) ?? 1;
   }
 
-  private chooseOtherMove(): number {
-    for ( let i = 0; i < this.serviceManual.gameTable.length; i++ ) {
-      if (this.serviceManual.gameTable[i] === '') {
+  private chooseOtherMove(gameTable: string[]): number {
+    for ( let i = 0; i < gameTable.length; i++ ) {
+      if (gameTable[i] === '') {
         return i;
       }
     }
@@ -109,13 +101,13 @@ export class TicTacToeAutoService {
     return this.success;
   }
 
-  private chooseNextMoveForAI(): number | null {
+  private chooseAttackOrDefenceForAI(): number | null {
     let checkAttack = this.checkWinCombination(this.nameAI);
     if (checkAttack !== null) {
       return checkAttack;
     }
 
-    let checkDefence = this.checkWinCombination(this.namePlayer);
+    let checkDefence = this.checkWinCombination(this.serviceManual.playerOne);
     if (checkDefence !== null) {
       return checkDefence;
     }
@@ -123,18 +115,7 @@ export class TicTacToeAutoService {
     return null
   }
 
-  private addOneMoveAI(): void {
-    for ( let i = 0; i < this.serviceManual.moveAi.length; i++ ) {
-      if (!this.serviceManual.moveAi[i]) {
-        this.serviceManual.moveAi[i] = true;
-        break;
-      }
-    }
-  }
-
-  private chooseFreeCornerIndex(): number | void {
-    const gameTable = this.serviceManual.gameTable;
-
+  private chooseFreeCornerIndex(gameTable: string[]): number | void {
     for ( let i = 0; i < 4; i++ ) {
       if (gameTable[this.cornerIndexes[i]] === '') {
         return this.cornerIndexes[i];
@@ -142,9 +123,7 @@ export class TicTacToeAutoService {
     }
   }
 
-  private chooseFreeMiddleIndex(): number | void {
-    const gameTable = this.serviceManual.gameTable;
-
+  private chooseFreeMiddleIndex(gameTable: string[]): number | void {
     for ( let i = 0; i < 4; i++ ) {
       if (gameTable[this.middleIndexes[i]] === '') {
         return this.middleIndexes[i];
@@ -152,27 +131,17 @@ export class TicTacToeAutoService {
     }
   }
 
-  private checkWinCombination(playerName: string): number | null{
-    const gameTable = this.serviceManual.gameTable;
-
+  private checkWinCombination(playerName: string): number | null {
+    const boardWithLines = this.serviceManual.getBoardWithLines();
     const winCombinationOne = ['', playerName, playerName].toString();
     const winCombinationTwo = [playerName, '', playerName].toString();
     const winCombinationThree = [playerName, playerName, ''].toString();
     const winCombinations = [ ['', playerName, playerName], [playerName, '', playerName], [playerName, playerName, ''] ];
 
-    const lines = [];
-    for ( let i = 0, y = 0, k = 3; i < gameTable.length - 1; i = i + 3, y++, k++){
-      lines[y] = [gameTable[i], gameTable[i + 1], gameTable[i + 2]];
-      lines[k] = [gameTable[y], gameTable[y + 3], gameTable[y + 6]];
-    }
-
-    lines.push([gameTable[0], gameTable[4], gameTable[8]]);
-    lines.push([gameTable[2], gameTable[4], gameTable[6]]);
-
-    for (let i = 0; i < lines.length; i++) {
-      let line = lines[i];
+    for (let i = 0; i < boardWithLines.length; i++) {
+      let line = boardWithLines[i];
       if (winCombinations.some(array => array.toString() === line.toString())) {
-        switch (lines[i].toString()) {
+        switch (boardWithLines[i].toString()) {
           case winCombinationOne:
             return TicTacToeAutoService.chooseWinAnswerCombinationOne(i);
           case winCombinationTwo:
@@ -186,7 +155,7 @@ export class TicTacToeAutoService {
     return null;
   }
 
-  private static chooseWinAnswerCombinationOne(index: number): number {
+  private static chooseWinAnswerCombinationOne(index: number): number | null {
     switch (index) {
       case 0:
       case 3:
@@ -203,11 +172,10 @@ export class TicTacToeAutoService {
         return 2;
     }
 
-    //For return
-    return 0;
+    return null;
   }
 
-  private static chooseWinAnswerCombinationTwo(index: number): number {
+  private static chooseWinAnswerCombinationTwo(index: number): number | null {
     switch (index) {
       case 0:
         return 1;
@@ -224,11 +192,10 @@ export class TicTacToeAutoService {
         return 5;
     }
 
-    //For return
-    return 0;
+    return null;
   }
 
-  private static chooseWinAnswerCombinationThree(index: number): number {
+  private static chooseWinAnswerCombinationThree(index: number): number | null {
     switch (index) {
       case 0:
         return 2;
@@ -245,7 +212,6 @@ export class TicTacToeAutoService {
         return 7
     }
 
-    //For return
-    return 0;
+    return null;
   }
 }

@@ -2,8 +2,10 @@
   <div class="modal-header">
     <h3>Event:</h3>
   </div>
-  <div class="modal-content"></div>
+  <div class="modal-content">
+    <p>{{ contentText }}</p>
+  </div>
   <div class="modal-footer">
-    <button class="modal-button" (click)="resetGameModal()">Новая игра</button>
+    <button class="modal-button" (click)="resetGameModal()">{{ buttonText }}</button>
   </div>
 </div>
