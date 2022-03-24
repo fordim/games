@@ -96,6 +96,9 @@
   color: darkgrey;
 }
 
+.active-button {
+  color: purple;
+}
 
 .block-field-logs {
   height: 300px;

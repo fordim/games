@@ -10,8 +10,8 @@
         </div>
       </div>
       <div class="block-footer">
-        <button class="block-button" (click)="resetGame()">Новая игра</button>
-        <button class="block-button" (click)="resetGameWithAI()">Новая игра c AI</button>
+        <button class="block-button" (click)="resetGame()" [ngClass]="{ 'active-button' : !gameWithAi }">Новая игра</button>
+        <button class="block-button" (click)="resetGameWithAI()" [ngClass]="{'active-button' : gameWithAi }">Новая игра c AI</button>
       </div>
     </div>
     <div class="block" [class.ban-blocks]="(modal$ | async)">

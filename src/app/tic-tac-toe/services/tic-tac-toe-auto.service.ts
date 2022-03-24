@@ -91,12 +91,16 @@ export class TicTacToeAutoService {
   }
 
   private chooseSecondMoveForAIHardcode(gameTable: string[]): number | null {
+
+    // | - - X | - X - | - - - | X - - | - - - | - X - | X - - | - - X |
+    // | X O - | - O - | - O X | - 0 - | X O - | - O - | - O X | - O - |
+    // | - - - | - - X | X - - | - X - | - - X | X - - | - - - | - X - |
     if (gameTable[2] === this.serviceManual.playerOne && gameTable[3] === this.serviceManual.playerOne) {
       return TicTacToeAutoService.randomNumber([0, 7]);
     }
 
-    if (gameTable[1] === this.serviceManual.playerOne && gameTable[6] === this.serviceManual.playerOne) {
-      return TicTacToeAutoService.randomNumber([0, 5]);
+    if (gameTable[1] === this.serviceManual.playerOne && gameTable[8] === this.serviceManual.playerOne) {
+      return TicTacToeAutoService.randomNumber([2, 3]);
     }
 
     if (gameTable[5] === this.serviceManual.playerOne && gameTable[6] === this.serviceManual.playerOne) {
@@ -105,6 +109,41 @@ export class TicTacToeAutoService {
 
     if (gameTable[0] === this.serviceManual.playerOne && gameTable[7] === this.serviceManual.playerOne) {
       return TicTacToeAutoService.randomNumber([5, 6]);
+    }
+
+    if (gameTable[3] === this.serviceManual.playerOne && gameTable[8] === this.serviceManual.playerOne) {
+      return TicTacToeAutoService.randomNumber([1, 6]);
+    }
+
+    if (gameTable[1] === this.serviceManual.playerOne && gameTable[6] === this.serviceManual.playerOne) {
+      return TicTacToeAutoService.randomNumber([0, 5]);
+    }
+
+    if (gameTable[0] === this.serviceManual.playerOne && gameTable[5] === this.serviceManual.playerOne) {
+      return TicTacToeAutoService.randomNumber([2, 7]);
+    }
+
+    if (gameTable[2] === this.serviceManual.playerOne && gameTable[7] === this.serviceManual.playerOne) {
+      return TicTacToeAutoService.randomNumber([3, 8]);
+    }
+
+    // | - X - | - X - | - - - | - - - |
+    // | X O - | - O X | X O - | - 0 X |
+    // | - - - | - - - | - X - | - X - |
+    if (gameTable[1] === this.serviceManual.playerOne && gameTable[3] === this.serviceManual.playerOne) {
+      return 0;
+    }
+
+    if (gameTable[3] === this.serviceManual.playerOne && gameTable[7] === this.serviceManual.playerOne) {
+      return 6;
+    }
+
+    if (gameTable[7] === this.serviceManual.playerOne && gameTable[5] === this.serviceManual.playerOne) {
+      return 8;
+    }
+
+    if (gameTable[5] === this.serviceManual.playerOne && gameTable[1] === this.serviceManual.playerOne) {
+      return 2;
     }
 
     return null;
