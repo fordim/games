@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable, of } from "rxjs";
+import { BehaviorSubject, Observable, of } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -138,20 +138,20 @@ export class TicTacToeService {
 
 
   public showModal( textEvent: string, error: boolean = false ): void {
-    this.modal$ = this.modal$.pipe(map(() => true));
-    this.contentTextEvent$ = this.modal$.pipe(map(() => textEvent));
-    this.buttonTextEvent$ = this.modal$.pipe(map(() => this.newGame));
+    this.modal$ = of(true);
+    this.contentTextEvent$ = of(textEvent);
+    this.buttonTextEvent$ = of(this.newGame)
 
     if (error) {
-      this.error$ = this.error$.pipe(map(() => error));
-      this.buttonTextEvent$ = this.modal$.pipe(map(() => this.ok));
+      this.error$ = of(error);
+      this.buttonTextEvent$ = of(this.ok);
       return;
     }
   }
 
   public closeModal() {
-    this.modal$ = this.modal$.pipe(map(() => false));
-    this.error$ = this.error$.pipe(map(() => false));
+    this.modal$ = of(false);
+    this.error$ = of(false);
   }
 
   public getBoardWithLines(): string[][] {

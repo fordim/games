@@ -1,0 +1,11 @@
+<div class="wrapper">
+  <div class="modal-header">
+    <h3>Текущий уровень {{ levelOfGame }}</h3>
+  </div>
+  <div class="modal-content">
+    <button class="modal-button" (click)="selectNewLevel(level)" *ngFor="let level of levelsOfGame">Уровень {{level}}</button>
+  </div>
+  <div class="modal-footer">
+    <button class="modal-button" (click)="closeModal()">Закрыть</button>
+  </div>
+</div>

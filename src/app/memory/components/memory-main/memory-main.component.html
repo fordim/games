@@ -1,0 +1,27 @@
+<div class="root" [class.ban-root]="(levelModal$ | async)">
+  <div class="wrapper" [class.ban-wrapper]="(levelModal$ | async)">
+    <div class="board">
+      <div class="card card-l" *ngFor="let card of (gameTable$ | async); let i = index" (click)="move(i)"
+           [class.card-l]="(levelOfGame === 1)" [class.card-m]="(levelOfGame === 2)"
+           [class.card-s]="(levelOfGame === 3 || levelOfGame === 4 || levelOfGame === 5)">
+        <img *ngIf="card.src" src="{{card.src}}" alt="">
+        <img *ngIf="!card.src" src="/assets/memory/images/shirt.png" alt="">
+      </div>
+    </div>
+    <div class="footer">
+      <div class="counter">
+        <p>Действий: {{ counter$ | async }}</p>
+      </div>
+      <button class="button" (click)="resetGame()">Новая игра</button>
+      <button class="button level" (click)="selectNewLevel()">Уровень {{ levelOfGame }}</button>
+    </div>
+  </div>
+  <div class="modal" *ngIf="(levelModal$ | async)">
+    <app-memory-level-modal></app-memory-level-modal>
+  </div>
+  <div class="modal" *ngIf="(endGameModal$ | async)">
+    <app-memory-endgame-modal
+      [contentText]="(contentTextEvent$ | async)"
+    ></app-memory-endgame-modal>
+  </div>
+</div>

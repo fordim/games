@@ -1,0 +1,128 @@
+.root {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  background: linear-gradient(306.09deg, #f7fefc 3%, #2cd8ac 59.8%);
+}
+
+.wrapper {
+  width: 1000px;
+  height: 600px;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  justify-content: center;
+  background-color: lightgrey;
+  border: 1px solid black;
+  border-radius: 8px;
+}
+
+.board {
+  width: 900px;
+  height: 450px;
+  background-color: burlywood;
+  border: 1px solid black;
+  border-radius: 8px;
+  position: relative;
+  font-family: "Gill Sans", sans-serif;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.footer {
+  width: 100%;
+  height: 50px;
+  padding-bottom: 25px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.button {
+  display: block;
+  color: black;
+  width: 200px;
+  height: 50px;
+
+  border: 1px solid darkblue;
+  border-radius: 5px;
+  background: linear-gradient(rgba(178, 144, 123, 0.96), rgb(230, 176, 0));
+  font-size:26px;
+  text-align: center;
+}
+
+.button:hover {
+  background: linear-gradient(rgba(148, 178, 123, 0.96), rgb(230, 165, 0));
+  color: white;
+}
+
+.card {
+  margin: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  border-radius: 5px;
+  border: 1px solid black;
+}
+
+.card-l {
+  height: 150px;
+  width: 150px;
+  font-size: 100px;
+}
+
+.card-m {
+  height: 100px;
+  width: 100px;
+  font-size: 80px;
+}
+
+.card-s {
+  height: 80px;
+  width: 80px;
+  font-size: 50px;
+}
+
+.card > img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.level {
+  background: linear-gradient(rgba(176, 151, 136, 0.96), rgb(230, 176, 0));
+}
+
+.counter {
+  width: 200px;
+  height: 50px;
+  background: linear-gradient(rgba(176, 151, 136, 0.96), rgb(229, 229, 229));
+  border-radius: 5px;
+  border: 1px solid darkblue;
+  text-align: center;
+  font-size:26px;
+  line-height:50px
+}
+
+.modal {
+  position: absolute;
+  visibility: visible;
+  z-index: 5;
+}
+
+.ban-wrapper {
+  opacity: 0.4;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.ban-root {
+  background-image: none;
+  background-color: darkgrey;
+}
