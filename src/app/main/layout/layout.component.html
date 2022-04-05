@@ -1,5 +1,16 @@
 <header>
-  <a routerLink="" class="button" routerLinkActive="active" [routerLinkActiveOptions]="{exact : true}">Main page</a>
-  <a routerLink="tic-tac-toe" class="button" routerLinkActive="active">Tic-Tac-Toe</a>
-  <a routerLink="memory" class="button" routerLinkActive="active">Memory</a>
+  <div class="wrapper">
+    <div class="user-block">
+      <a routerLink="" class="button" routerLinkActive="active" [routerLinkActiveOptions]="{exact : true}">Main page</a>
+      <p *ngIf="(activeUser$ | async)">User: {{ activeUserName$ | async }}</p>
+    </div>
+    <div class="game-block" [class.ban-block]="!(activeUser$ | async)">
+      <p>Games:</p>
+      <a routerLink="tic-tac-toe" class="button" routerLinkActive="active">Tic-Tac-Toe</a>
+      <a routerLink="memory" class="button" routerLinkActive="active">Memory</a>
+    </div>
+  </div>
+  <div class="logout-block" [class.ban-block]="!(activeUser$ | async)">
+    <button routerLink="" class="button" (click)="logout()">Logout</button>
+  </div>
 </header>

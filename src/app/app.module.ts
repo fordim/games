@@ -10,6 +10,8 @@ import { TicTacToeModalComponent } from './tic-tac-toe/components/tic-tac-toe-mo
 import { MemoryMainComponent } from './memory/components/memory-main/memory-main.component';
 import { MemoryLevelModalComponent } from "./memory/components/memory-level-modal/memory-level-modal.component";
 import { MemoryEndgameModalComponent } from './memory/components/memory-endgame-modal/memory-endgame-modal.component';
+import { FormsModule } from "@angular/forms";
+import { MainModalComponent } from './main/main-modal/main-modal.component';
 
 @NgModule({
   declarations: [
@@ -20,11 +22,13 @@ import { MemoryEndgameModalComponent } from './memory/components/memory-endgame-
     TicTacToeModalComponent,
     MemoryMainComponent,
     MemoryLevelModalComponent,
-    MemoryEndgameModalComponent
+    MemoryEndgameModalComponent,
+    MainModalComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -6,17 +6,17 @@ import { TicTacToeService } from "./tic-tac-toe.service";
 })
 export class TicTacToeAutoService {
 
-  private nameAI: string = this.serviceManual.playerTwo;
+  private nameAI: string = this._serviceManual.playerTwo;
   private cornerIndexes: number[] = [0, 2, 6, 8];
   private centerIndex: number = 4;
   private middleIndexes: number[] = [1, 3, 5, 7];
   private success: number = 200;
 
-  constructor(private serviceManual: TicTacToeService) {
+  constructor(private _serviceManual: TicTacToeService) {
   }
 
   public move(index: number): boolean | void {
-     const errorMassageFromPlayer = this.serviceManual.move(index);
+     const errorMassageFromPlayer = this._serviceManual.move(index);
      if (errorMassageFromPlayer) {
        return;
      }
@@ -26,15 +26,15 @@ export class TicTacToeAutoService {
       return;
     }
 
-    this.serviceManual.drawOneMove(indexAI);
-    this.serviceManual.addNewLog(indexAI);
-    this.serviceManual.stepsHistory$.next([...this.serviceManual.stepsHistory$.value, [...this.serviceManual.gameTable$.value]]);
-    this.serviceManual.checkGameStatus();
-    this.serviceManual.changePlayer();
+    this._serviceManual.drawOneMove(indexAI);
+    this._serviceManual.addNewLog(indexAI);
+    this._serviceManual.stepsHistory$.next([...this._serviceManual.stepsHistory$.value, [...this._serviceManual.gameTable$.value]]);
+    this._serviceManual.checkGameStatus();
+    this._serviceManual.changePlayer();
   }
 
   private chooseMoveForAI(playerIndex: number): number {
-    const gameTable = this.serviceManual.gameTable$.value;
+    const gameTable = this._serviceManual.gameTable$.value;
     let moveNumber = TicTacToeAutoService.getMoveNumber(gameTable);
 
     if (moveNumber === 1) {
@@ -47,7 +47,7 @@ export class TicTacToeAutoService {
     }
 
     if (moveNumber === 2) {
-      return this.chooseSecondMoveForAI(playerIndex, gameTable);
+      return this.chooseSecondMoveForAI(gameTable);
     }
 
     let otherMove = this.chooseOtherMove(gameTable);
@@ -77,8 +77,8 @@ export class TicTacToeAutoService {
     return this.centerIndex;
   }
 
-  private chooseSecondMoveForAI(playerIndex: number, gameTable: string[]): number {
-    if (gameTable[this.centerIndex] === this.serviceManual.playerOne) {
+  private chooseSecondMoveForAI(gameTable: string[]): number {
+    if (gameTable[this.centerIndex] === this._serviceManual.playerOne) {
       return this.chooseFreeCornerIndex(gameTable) ?? 0;
     }
 
@@ -95,54 +95,54 @@ export class TicTacToeAutoService {
     // | - - X | - X - | - - - | X - - | - - - | - X - | X - - | - - X |
     // | X O - | - O - | - O X | - 0 - | X O - | - O - | - O X | - O - |
     // | - - - | - - X | X - - | - X - | - - X | X - - | - - - | - X - |
-    if (gameTable[2] === this.serviceManual.playerOne && gameTable[3] === this.serviceManual.playerOne) {
+    if (gameTable[2] === this._serviceManual.playerOne && gameTable[3] === this._serviceManual.playerOne) {
       return TicTacToeAutoService.randomNumber([0, 7]);
     }
 
-    if (gameTable[1] === this.serviceManual.playerOne && gameTable[8] === this.serviceManual.playerOne) {
+    if (gameTable[1] === this._serviceManual.playerOne && gameTable[8] === this._serviceManual.playerOne) {
       return TicTacToeAutoService.randomNumber([2, 3]);
     }
 
-    if (gameTable[5] === this.serviceManual.playerOne && gameTable[6] === this.serviceManual.playerOne) {
+    if (gameTable[5] === this._serviceManual.playerOne && gameTable[6] === this._serviceManual.playerOne) {
       return TicTacToeAutoService.randomNumber([1, 8]);
     }
 
-    if (gameTable[0] === this.serviceManual.playerOne && gameTable[7] === this.serviceManual.playerOne) {
+    if (gameTable[0] === this._serviceManual.playerOne && gameTable[7] === this._serviceManual.playerOne) {
       return TicTacToeAutoService.randomNumber([5, 6]);
     }
 
-    if (gameTable[3] === this.serviceManual.playerOne && gameTable[8] === this.serviceManual.playerOne) {
+    if (gameTable[3] === this._serviceManual.playerOne && gameTable[8] === this._serviceManual.playerOne) {
       return TicTacToeAutoService.randomNumber([1, 6]);
     }
 
-    if (gameTable[1] === this.serviceManual.playerOne && gameTable[6] === this.serviceManual.playerOne) {
+    if (gameTable[1] === this._serviceManual.playerOne && gameTable[6] === this._serviceManual.playerOne) {
       return TicTacToeAutoService.randomNumber([0, 5]);
     }
 
-    if (gameTable[0] === this.serviceManual.playerOne && gameTable[5] === this.serviceManual.playerOne) {
+    if (gameTable[0] === this._serviceManual.playerOne && gameTable[5] === this._serviceManual.playerOne) {
       return TicTacToeAutoService.randomNumber([2, 7]);
     }
 
-    if (gameTable[2] === this.serviceManual.playerOne && gameTable[7] === this.serviceManual.playerOne) {
+    if (gameTable[2] === this._serviceManual.playerOne && gameTable[7] === this._serviceManual.playerOne) {
       return TicTacToeAutoService.randomNumber([3, 8]);
     }
 
     // | - X - | - X - | - - - | - - - |
     // | X O - | - O X | X O - | - 0 X |
     // | - - - | - - - | - X - | - X - |
-    if (gameTable[1] === this.serviceManual.playerOne && gameTable[3] === this.serviceManual.playerOne) {
+    if (gameTable[1] === this._serviceManual.playerOne && gameTable[3] === this._serviceManual.playerOne) {
       return 0;
     }
 
-    if (gameTable[3] === this.serviceManual.playerOne && gameTable[7] === this.serviceManual.playerOne) {
+    if (gameTable[3] === this._serviceManual.playerOne && gameTable[7] === this._serviceManual.playerOne) {
       return 6;
     }
 
-    if (gameTable[7] === this.serviceManual.playerOne && gameTable[5] === this.serviceManual.playerOne) {
+    if (gameTable[7] === this._serviceManual.playerOne && gameTable[5] === this._serviceManual.playerOne) {
       return 8;
     }
 
-    if (gameTable[5] === this.serviceManual.playerOne && gameTable[1] === this.serviceManual.playerOne) {
+    if (gameTable[5] === this._serviceManual.playerOne && gameTable[1] === this._serviceManual.playerOne) {
       return 2;
     }
 
@@ -172,7 +172,7 @@ export class TicTacToeAutoService {
       return checkAttack;
     }
 
-    let checkDefence = this.checkWinCombination(this.serviceManual.playerOne);
+    let checkDefence = this.checkWinCombination(this._serviceManual.playerOne);
     if (checkDefence !== null) {
       return checkDefence;
     }
@@ -197,7 +197,7 @@ export class TicTacToeAutoService {
   }
 
   private checkWinCombination(playerName: string): number | null {
-    const boardWithLines = this.serviceManual.getBoardWithLines();
+    const boardWithLines = this._serviceManual.getBoardWithLines();
     const winCombinationOne = ['', playerName, playerName].toString();
     const winCombinationTwo = [playerName, '', playerName].toString();
     const winCombinationThree = [playerName, playerName, ''].toString();

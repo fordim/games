@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {MemoryService} from "../../services/memory.service";
+import { MemoryService } from "../../services/memory.service";
 
 @Component({
   selector: 'app-memory-main',
@@ -7,30 +7,30 @@ import {MemoryService} from "../../services/memory.service";
   styleUrls: ['./memory-main.component.css']
 })
 export class MemoryMainComponent implements OnInit {
-  gameTable$ = this.service.gameTable$;
-  levelOfGame = this.service.levelOfGame;
-  counter$ = this.service.counter$;
-  levelModal$ = this.service.levelModal$;
-  endGameModal$ = this.service.endGameModal$;
-  contentTextEvent$ = this.service.contentTextEvent$;
+  gameTable$ = this._service.gameTable$;
+  levelOfGame$ = this._service.levelOfGame$;
+  counter$ = this._service.counter$;
+  levelModal$ = this._service.levelModal$;
+  endGameModal$ = this._service.endGameModal$;
+  contentTextEvent$ = this._service.contentTextEvent$;
+  timeCounter$ = this._service.timeCounter$;
+  showTimeCounter$ = this._service.showTimeCounter$;
 
-  constructor(private service: MemoryService) { }
+  constructor(private _service: MemoryService) { }
 
   ngOnInit(): void {
   }
 
   move(index: number): void {
-    this.service.move(index);
-    this.endGameModal$ = this.service.endGameModal$;
-    this.contentTextEvent$ = this.service.contentTextEvent$;
+    this._service.move(index);
   }
 
   resetGame(): void {
-    this.service.resetBoard();
+    this._service.resetBoard();
+    this.timeCounter$ = this._service.timeCounter$;
   }
 
   selectNewLevel(): void {
-    this.service.showLevelModal();
-    this.levelModal$ = this.service.levelModal$;
+    this._service.showLevelModal();
   }
 }

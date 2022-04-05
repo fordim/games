@@ -5,6 +5,11 @@ header {
   border-radius: 5px;
   border: 1px solid #3772e8;
   position: absolute;
+  justify-content: space-between;
+}
+
+.wrapper {
+  display: flex;
 }
 
 .button {
@@ -22,4 +27,45 @@ header {
 
 .active {
   color: #c21449;
+}
+
+.user-block {
+  width: 350px;
+  border-right: 1px solid #3772e8;
+  display: flex;
+}
+
+.user-block > p {
+  border-left: 1px solid #3772e8;
+  padding-left: 15px;
+  display: block;
+  width: 250px;
+  color: white;
+  font-size: 16px;
+  line-height: 50px;
+}
+
+.game-block {
+  display: flex;
+}
+
+.game-block > p {
+  padding-left: 15px;
+  display: block;
+  color: white;
+  font-size: 16px;
+  line-height: 50px;
+}
+
+.ban-block {
+  opacity: 0.4;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.logout-block {
+  width: 100px;
+  border-left: 1px solid #3772e8;
+  display: flex;
+  justify-content: space-around;
 }

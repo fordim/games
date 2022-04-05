@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from "rxjs";
+import { BehaviorSubject, map, Observable, of, repeatWhen, Subject, takeUntil, timer } from "rxjs";
 import { LEVEL_FIVE, LEVEL_FOUR, LEVEL_ONE, LEVEL_THREE, LEVEL_TWO } from "./const";
 
 @Injectable({
@@ -10,13 +10,28 @@ export class MemoryService {
   savedTable$ = new BehaviorSubject<any[]>([]);
   savedMatchesTable$ = new BehaviorSubject<any[]>([]);
 
-  levelOfGame: number = 1;
+  levelOfGame$ = new BehaviorSubject<number>(1);
   levelsOfGame: number[] = [ 1, 2, 3, 4, 5 ];
   oneMoveIndexes: number[] = [];
   counter$ = new BehaviorSubject<number>(0);
-  levelModal$: Observable<any> = of(false);
-  endGameModal$: Observable<any> = of(false);
-  contentTextEvent$: Observable<any> = of('');
+  levelModal$ = new BehaviorSubject<boolean>(false);
+  endGameModal$ = new BehaviorSubject<boolean>(false);
+  contentTextEvent$ = new BehaviorSubject<string>('');
+
+  timeCounter$: Observable<number> = of(0);
+  showTimeCounter$ = new BehaviorSubject<boolean>(false);
+  timeoutId: any;
+
+  bestTry = {
+    one: 0,
+    two: 0,
+    three: 0,
+    four: 0,
+    five: 0
+  };
+
+  private readonly _stop = new Subject<void>();
+  private readonly _start = new Subject<void>();
 
   constructor() { }
 
@@ -38,6 +53,7 @@ export class MemoryService {
       this.addOneMoveToCounter();
 
       if (this.isGameEnded()) {
+        this.addToLocalStorageBestTry();
         this.showEndGameModal();
       }
       return;
@@ -57,13 +73,54 @@ export class MemoryService {
     this.clearOneMoveIndexes();
     this.clearCounter();
 
-    setTimeout(() => {
+    switch (this.levelOfGame$.value) {
+      case 1:
+      case 2:
+        this.mySetTimeout(3500, 3);
+        break;
+      case 3:
+        this.mySetTimeout(6500, 6);
+        break;
+      case 4:
+        this.mySetTimeout(9500, 9);
+        break
+      case 5:
+        this.mySetTimeout(12500, 12);
+        break
+    }
+  }
+
+  private mySetTimeout(timeout: number, seconds: number): void {
+    clearTimeout(this.timeoutId);
+    this.startTimeCounter(seconds);
+    this.timeoutId = setTimeout(() => {
       this.turnOverCards()
-    }, 1500);
+      this.timerStop();
+    }, timeout);
+  }
+
+  private startTimeCounter(number: number): void {
+    this.timerStart();
+    let intervalTimer = timer(0,1000);
+
+    this.timeCounter$ = intervalTimer
+      .pipe(takeUntil(this._stop), repeatWhen(() => this._start), map((data) => {
+        return number - data;
+      }))
+  }
+
+  private timerStart(): void {
+    this.showTimeCounter$.next(true);
+    this._start.next();
+  }
+
+  private timerStop(): void {
+    this._stop.next();
+    this.showTimeCounter$.next(false);
   }
 
   private clearBoard(): void {
-    switch (this.levelOfGame) {
+    switch (this.levelOfGame$.value) {
       case 1:
         this.gameTable$.next(LEVEL_ONE.sort(() => Math.random() - 0.5));
         break;
@@ -152,25 +209,25 @@ export class MemoryService {
   }
 
   public showLevelModal(): void {
-    this.levelModal$ = of(true);
+    this.levelModal$.next(true);
   }
 
   public closeLevelModal(): void {
-    this.levelModal$ = of(false);
+    this.levelModal$.next(false);
   }
 
   public showEndGameModal(): void {
-    const textEvent = `Конец игры, ходов затрачено ${this.counter$.value}`;
-    this.endGameModal$ = of(true);
-    this.contentTextEvent$ = of(textEvent);
+    const textEvent = `Конец игры, ходов затрачено ${this.counter$.value}. Лучшая попытка ${this.getBestScoreForLevel()}.`;
+    this.endGameModal$.next(true);
+    this.contentTextEvent$.next(textEvent);
   }
 
   public closeEndGameModal(): void {
-    this.endGameModal$ = of(false);
+    this.endGameModal$.next(false);
   }
 
   public changeLevelOfGame(level: number): void {
-    this.levelOfGame = level;
+    this.levelOfGame$.next(level);
   }
 
   private isGameEnded(): boolean {
@@ -184,5 +241,61 @@ export class MemoryService {
     }
 
     return counter === 0;
+  }
+
+  private addToLocalStorageBestTry(): void {
+    let bestTryCanBeNull = window.localStorage.getItem('bestTry');
+    if (bestTryCanBeNull === null) {
+      window.localStorage.setItem('bestTry', JSON.stringify(this.bestTry));
+    }
+
+    let bestTryLocal = window.localStorage.getItem('bestTry') ?? '';
+    let bestTryObject = JSON.parse(bestTryLocal);
+
+    switch(this.levelOfGame$.value) {
+      case 1:
+        if (bestTryObject.one === 0 || bestTryObject.one >= this.counter$.value) {
+          bestTryObject.one = this.counter$.value;
+        }
+        break;
+      case 2:
+        if (bestTryObject.two === 0 || bestTryObject.two >= this.counter$.value) {
+          bestTryObject.two = this.counter$.value;
+        }
+        break;
+      case 3:
+        if (bestTryObject.three === 0 || bestTryObject.three >= this.counter$.value) {
+          bestTryObject.three = this.counter$.value;
+        }
+        break;
+      case 4:
+        if (bestTryObject.four === 0 || bestTryObject.four >= this.counter$.value) {
+          bestTryObject.four = this.counter$.value;
+        }
+        break;
+      case 5:
+        if (bestTryObject.five === 0 || bestTryObject.five >= this.counter$.value) {
+          bestTryObject.five = this.counter$.value;
+        }
+        break;
+    }
+
+    this.bestTry = bestTryObject;
+    window.localStorage.setItem('bestTry', JSON.stringify(this.bestTry));
+  }
+
+  private getBestScoreForLevel(): number | void {
+    switch (this.levelOfGame$.value) {
+      case 1:
+        return this.bestTry.one;
+      case 2:
+        return this.bestTry.two;
+      case 3:
+        return this.bestTry.three;
+      case 4:
+        return this.bestTry.four;
+      case 5:
+        return this.bestTry.five;
+    }
   }
 }

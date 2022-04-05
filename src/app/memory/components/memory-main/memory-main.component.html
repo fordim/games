@@ -1,11 +1,13 @@
 <div class="root" [class.ban-root]="(levelModal$ | async)">
   <div class="wrapper" [class.ban-wrapper]="(levelModal$ | async)">
+    <div class="time-counter">
+      <p *ngIf="(showTimeCounter$ | async)">{{timeCounter$ | async}}</p>
+    </div>
     <div class="board">
       <div class="card card-l" *ngFor="let card of (gameTable$ | async); let i = index" (click)="move(i)"
-           [class.card-l]="(levelOfGame === 1)" [class.card-m]="(levelOfGame === 2)"
-           [class.card-s]="(levelOfGame === 3 || levelOfGame === 4 || levelOfGame === 5)">
+           [class.card-l]="((levelOfGame$ | async) === 1)" [class.card-m]="((levelOfGame$ | async) === 2)"
+           [class.card-s]="((levelOfGame$ | async) === 3 || (levelOfGame$ | async) === 4 || (levelOfGame$ | async) === 5)">
         <img *ngIf="card.src" src="{{card.src}}" alt="">
-        <img *ngIf="!card.src" src="/assets/memory/images/shirt.png" alt="">
       </div>
     </div>
     <div class="footer">
@@ -13,7 +15,7 @@
         <p>Действий: {{ counter$ | async }}</p>
       </div>
       <button class="button" (click)="resetGame()">Новая игра</button>
-      <button class="button level" (click)="selectNewLevel()">Уровень {{ levelOfGame }}</button>
+      <button class="button level" (click)="selectNewLevel()">Уровень {{ levelOfGame$ | async }}</button>
     </div>
   </div>
   <div class="modal" *ngIf="(levelModal$ | async)">

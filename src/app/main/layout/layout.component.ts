@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {UserService} from "../services/user.service";
 
 @Component({
   selector: 'app-layout',
@@ -7,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LayoutComponent implements OnInit {
 
-  constructor() { }
+  activeUser$ = this._user.activeUser$;
+  activeUserName$ = this._user.activeUserName$;
+
+  constructor(private _user: UserService) {
+  }
 
   ngOnInit(): void {
   }
 
+  public logout() {
+    this._user.logoutUser();
+  }
 }

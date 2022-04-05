@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MemoryService } from "../../services/memory.service";
-import { MemoryMainComponent } from "../memory-main/memory-main.component";
 
 @Component({
   selector: 'app-memory-endgame-modal',
@@ -8,25 +7,23 @@ import { MemoryMainComponent } from "../memory-main/memory-main.component";
   styleUrls: ['./memory-endgame-modal.component.css']
 })
 export class MemoryEndgameModalComponent implements OnInit {
-  @Input() contentText: string = '';
+  @Input() contentText: string | null = '';
+
   closeModalText: string = 'Закрыть';
   newGameText: string = 'Новая игра';
 
-  constructor(private service: MemoryService, private mainComponent: MemoryMainComponent) {
-
+  constructor(private _service: MemoryService) {
   }
 
   ngOnInit(): void {
   }
 
   closeModal(): void {
-    this.service.closeEndGameModal();
-    this.mainComponent.endGameModal$ = this.service.endGameModal$;
+    this._service.closeEndGameModal();
   }
 
   newGame(): void {
-    this.service.resetBoard();
-    this.service.closeEndGameModal();
-    this.mainComponent.endGameModal$ = this.service.endGameModal$;
+    this._service.resetBoard();
+    this.closeModal();
   }
 }

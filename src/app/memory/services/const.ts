@@ -134,12 +134,12 @@ export const LEVEL_THREE: any[] = [
     src: '/assets/memory/images/shell.png',
   },
   {
-    name: 'armor',
-    src: '/assets/memory/images/armor.png',
+    name: 'crystal-green',
+    src: '/assets/memory/images/crystal-green.png',
   },
   {
-    name: 'armor',
-    src: '/assets/memory/images/armor.png',
+    name: 'crystal-green',
+    src: '/assets/memory/images/crystal-green.png',
   },
   {
     name: 'crystal-blue',
@@ -201,12 +201,12 @@ export const LEVEL_FOUR: any[] = [
     src: '/assets/memory/images/shell.png',
   },
   {
-    name: 'armor',
-    src: '/assets/memory/images/armor.png',
+    name: 'crystal-green',
+    src: '/assets/memory/images/crystal-green.png',
   },
   {
-    name: 'armor',
-    src: '/assets/memory/images/armor.png',
+    name: 'crystal-green',
+    src: '/assets/memory/images/crystal-green.png',
   },
   {
     name: 'crystal-blue',
@@ -241,12 +241,12 @@ export const LEVEL_FOUR: any[] = [
     src: '/assets/memory/images/chest-red.png',
   },
   {
-    name: 'chest-open',
-    src: '/assets/memory/images/chest-open.png',
+    name: 'paw',
+    src: '/assets/memory/images/paw.png',
   },
   {
-    name: 'chest-open',
-    src: '/assets/memory/images/chest-open.png',
+    name: 'paw',
+    src: '/assets/memory/images/paw.png',
   },
 ]; // 4x6 s
 
@@ -300,12 +300,12 @@ export const LEVEL_FIVE: any[] = [
     src: '/assets/memory/images/shell.png',
   },
   {
-    name: 'armor',
-    src: '/assets/memory/images/armor.png',
+    name: 'crystal-green',
+    src: '/assets/memory/images/crystal-green.png',
   },
   {
-    name: 'armor',
-    src: '/assets/memory/images/armor.png',
+    name: 'crystal-green',
+    src: '/assets/memory/images/crystal-green.png',
   },
   {
     name: 'crystal-blue',
@@ -340,12 +340,12 @@ export const LEVEL_FIVE: any[] = [
     src: '/assets/memory/images/chest-red.png',
   },
   {
-    name: 'chest-open',
-    src: '/assets/memory/images/chest-open.png',
+    name: 'paw',
+    src: '/assets/memory/images/paw.png',
   },
   {
-    name: 'chest-open',
-    src: '/assets/memory/images/chest-open.png',
+    name: 'paw',
+    src: '/assets/memory/images/paw.png',
   },
   {
     name: 'whirligig',

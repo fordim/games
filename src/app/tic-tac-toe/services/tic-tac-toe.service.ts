@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from "rxjs";
+import { BehaviorSubject } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -19,10 +19,10 @@ export class TicTacToeService {
   public logs$ = new BehaviorSubject<string[]>([]);
   public stepsHistory$ = new BehaviorSubject<string[][]>([]);
   public gameTable$ = new BehaviorSubject<string[]>(this.blankGameTable.slice(0));
-  public modal$: Observable<any> = of(false);
-  public error$: Observable<any> = of(false);
-  public contentTextEvent$: Observable<any> = of('');
-  public buttonTextEvent$: Observable<any> = of('');
+  public modal$ = new BehaviorSubject<boolean>(false);
+  public error$ = new BehaviorSubject<boolean>(false);
+  public contentTextEvent$ = new BehaviorSubject<string>('false');
+  public buttonTextEvent$ = new BehaviorSubject<string>('false');
 
   constructor() { }
 
@@ -138,20 +138,20 @@ export class TicTacToeService {
 
 
   public showModal( textEvent: string, error: boolean = false ): void {
-    this.modal$ = of(true);
-    this.contentTextEvent$ = of(textEvent);
-    this.buttonTextEvent$ = of(this.newGame)
+    this.modal$.next(true);
+    this.contentTextEvent$.next(textEvent);
+    this.buttonTextEvent$.next(this.newGame);
 
     if (error) {
-      this.error$ = of(error);
-      this.buttonTextEvent$ = of(this.ok);
+      this.error$.next(error);
+      this.buttonTextEvent$.next(this.ok);
       return;
     }
   }
 
   public closeModal() {
-    this.modal$ = of(false);
-    this.error$ = of(false);
+    this.modal$.next(false);
+    this.error$.next(false);
   }
 
   public getBoardWithLines(): string[][] {
