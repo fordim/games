@@ -123,6 +123,10 @@
   pointer-events: none;
 }
 
+.ban-board {
+  pointer-events: none;
+}
+
 .ban-root {
   background-image: none;
   background-color: darkgrey;

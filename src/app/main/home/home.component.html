@@ -1,6 +1,5 @@
 <div class="root" [class.ban-root]="(modal$ | async)">
   <div class="wrapper" *ngIf="!(isFormSuccess$ | async)">
-<!--  <div class="wrapper" *ngIf="!(activeUser$ | async)">-->
     <form class="form" [class.ban-form]="(modal$ | async)" *ngIf="!(loginForm$ | async)">
       <div class="field">
         <label for="addName">Name:</label>
@@ -12,7 +11,7 @@
       </div>
       <div class="field">
         <label for="addPassword">Password:</label>
-        <input type="text" name="password" id="addPassword" [(ngModel)]="password" maxlength="25" minlength="3" required>
+        <input type="password" name="password" id="addPassword" [(ngModel)]="password" maxlength="25" minlength="3" required>
       </div>
       <button on-click="addUser(name, login, password)" class="button" type="submit">Регистрация</button>
       <a on-click="loginForm()" type="submit">Авторизация</a>
@@ -24,7 +23,7 @@
       </div>
       <div class="field">
         <label for="password">Password:</label>
-        <input type="text" name="password" id="password" [(ngModel)]="password" maxlength="25" minlength="3" required>
+        <input type="password" name="password" id="password" [(ngModel)]="password" maxlength="25" minlength="3" required>
       </div>
       <button on-click="logIn(login, password)" class="button" type="submit">Авторизация</button>
       <a on-click="registrationForm()" type="submit">Регистрация</a>

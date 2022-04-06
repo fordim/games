@@ -3,7 +3,7 @@
     <div class="time-counter">
       <p *ngIf="(showTimeCounter$ | async)">{{timeCounter$ | async}}</p>
     </div>
-    <div class="board">
+    <div class="board" [class.ban-board]="(showTimeCounter$ | async)">
       <div class="card card-l" *ngFor="let card of (gameTable$ | async); let i = index" (click)="move(i)"
            [class.card-l]="((levelOfGame$ | async) === 1)" [class.card-m]="((levelOfGame$ | async) === 2)"
            [class.card-s]="((levelOfGame$ | async) === 3 || (levelOfGame$ | async) === 4 || (levelOfGame$ | async) === 5)">
